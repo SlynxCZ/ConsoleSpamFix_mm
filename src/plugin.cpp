@@ -73,7 +73,7 @@ void Plugin::CCvar_DispatchConCommand(ConCommandRef cmd, const CCommandContext& 
 		CServerSideClient* pClient = GetClientBySlot(commandPlayerSlot);
 
 		// Block chat messages from players not fully ingame, can be interpreted as console messages
-		if (!pClient || pClient->IsActive())
+		if (!pClient || !pClient->IsActive())
 		{
 			META_LOG(this, "Blocked chat message from user ID %i not fully in game\n", g_pEngineServer->GetPlayerUserId(commandPlayerSlot).Get());
 			RETURN_META(MRES_SUPERCEDE);
