@@ -41,9 +41,6 @@ list(APPEND SOURCE_FILES
     ${SOURCESDK_DIR}/public/tier0/memoverride.cpp
     ${SOURCESDK_DIR}/tier1/keyvalues3.cpp
     ${SOURCESDK_DIR}/tier1/convar.cpp
-    ${SOURCESDK_DIR}/entity2/entityidentity.cpp
-    ${SOURCESDK_DIR}/entity2/entitysystem.cpp
-    ${SOURCESDK_DIR}/entity2/entitykeyvalues.cpp
 )
 
 foreach(f ${SOURCE_FILES})
