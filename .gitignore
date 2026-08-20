@@ -1,0 +1,16 @@
+/build/
+/vs/
+/linuxbuild/
+.ccls-cache/
+.cmake/
+cmake-build-*/
+cmake-build-steamrt-docker/
+cmake-build-relwithdebinfo-docker/
+.kdev4/
+generated/
+!**/protobuf/generated/
+output/
+dockerbuild/
+.idea/
+
+configs/addons/metamod/*.vdf

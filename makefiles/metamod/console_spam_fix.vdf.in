@@ -1,0 +1,5 @@
+"Metamod Plugin"
+{
+	"alias"	"console_spam_fix"
+	"file"	"addons/console_spam_fix/bin/${PROJECT_VDF_PLATFORM}/console_spam_fix"
+}
