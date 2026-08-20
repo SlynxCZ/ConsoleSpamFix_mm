@@ -23,6 +23,7 @@ for sdk_target in MMSPlugin.sdk_targets:
   ]
 
   binary.compiler.linkflags += [
+    MMSPlugin.sourcehook_lib['binaries_by_arch'][cxx.target.arch],
     MMSPlugin.dynlibutils_lib[cxx.target.arch],
   ]
 

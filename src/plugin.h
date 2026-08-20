@@ -7,6 +7,25 @@
 #include "inetchannel.h"
 #include "ISmmPlugin.h"
 
+// Redirects SH_GLOB_SHPTR/SH_GLOB_PLUGPTR onto a private, plugin-owned
+// SourceHook engine (vendor/sourcehook) instead of metamod's shared
+// g_SHPtr/g_PLID -- must come after ISmmPlugin.h (which is what defines the
+// defaults this overrides) and before any SH_DECL_HOOK*/SH_ADD_*HOOK usage.
+//
+// CAVEAT, and it is a real one here: the single hook this plugin installs is
+// a VTABLE hook on ICvar::DispatchConCommand, and other plugins on the same
+// server hook that exact slot through metamod's shared engine -- e.g.
+// CounterStrikeSharp (SH_ADD_HOOK_MEMFUNC on the same method), and CS2Fixes
+// and source2toolkit via KHook. Two independent ISourceHook instances
+// patching one vtable slot do not coordinate: whichever patched last is what
+// the slot points at, each treats whatever it found there as "the original",
+// and MRES_SUPERCEDE only suppresses its own engine's chain. So whether this
+// plugin's block lands before or after a CounterStrikeSharp say listener is
+// decided by plugin load order rather than by SourceHook, and unloading
+// either side restores a vtable slot the other may have re-patched since.
+// See README.md for the whole picture.
+#include "sourcehook/sourcehook_metamod_override.h"
+
 #include "const.h"
 #include "tier1/convar.h"
 

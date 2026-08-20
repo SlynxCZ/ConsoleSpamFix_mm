@@ -24,12 +24,11 @@ endif()
 include(makefiles/shared.cmake)
 include(makefiles/protobuf.cmake)
 
-# Metamod's shared SourceHook, deliberately NOT a private vendored one: the
-# hook this plugin installs is a vtable hook on ICvar, and other plugins on
-# the same server hook that same interface. Two independent ISourceHook
-# instances patching one vtable slot do not coordinate their trampolines, so
-# the engine that owns the chain has to be the one everybody else already
-# uses.
+# This plugin's own private SourceHook, not metamod's shared one -- see
+# makefiles/shared.cmake, src/plugin.h and README.md. Its own test suite
+# stays out of this build.
+set(SOURCEHOOK_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+add_subdirectory(vendor/sourcehook)
 add_subdirectory(vendor/dynlibutils)
 
 file(GLOB_RECURSE SOURCE_FILES

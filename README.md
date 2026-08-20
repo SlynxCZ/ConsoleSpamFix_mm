@@ -97,9 +97,35 @@ cmake --build build
 Output lands in `build/addons/`, laid out ready to copy into the server's
 `game/csgo/` directory.
 
-Unlike the other plugins in this family, this one uses **metamod's shared
-SourceHook**, not a private vendored instance. The hook is a vtable hook on
-`ICvar`, and other plugins on the same server hook that same interface — two
-independent `ISourceHook` instances patching one vtable slot do not coordinate
-their trampolines, so the engine that owns the chain has to be the one everybody
-else is already using.
+## SourceHook
+
+Like the rest of the family, this plugin carries its **own private SourceHook**
+(`vendor/sourcehook`, wired up via `sourcehook_metamod_override.h`) rather than
+using metamod's shared instance.
+
+Be aware of what that costs here specifically, because this plugin is the one
+case in the family where it is not free. Its single hook is a **vtable** hook on
+`ICvar::DispatchConCommand`, and that exact slot is hooked by other plugins on
+the same server through metamod's shared engine — CounterStrikeSharp does
+`SH_ADD_HOOK_MEMFUNC` on the same method, CS2Fixes and source2toolkit patch it
+via KHook.
+
+Two independent `ISourceHook` instances patching one vtable slot do not
+coordinate. Whichever patched last is what the slot points at; each treats
+whatever it found there as "the original"; and `MRES_SUPERCEDE` only suppresses
+its own engine's chain. Two consequences follow:
+
+- **Ordering is decided by plugin load order, not by SourceHook.** The point of
+  blocking `say` here is to get in front of a CounterStrikeSharp listener that
+  would otherwise throw on the dead controller (see the comment block in
+  `src/plugin.cpp`). If this plugin's engine patched the slot first and
+  metamod's patched over it afterwards, the CSSharp listener runs first anyway
+  and the block never protects it. Load this plugin *after* the ones it needs
+  to preempt.
+- **Unloading is order-sensitive too.** Whichever engine restores the slot last
+  writes back the pointer it captured, which may no longer be what the other
+  side expects.
+
+If either bites, the fix is not to change this plugin's hook — it is to put both
+sides on one engine, either by going back to metamod's shared SourceHook here or
+by having the other side join this one via `sourcehook_metamod_shared.h`.

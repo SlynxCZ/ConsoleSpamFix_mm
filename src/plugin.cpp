@@ -32,6 +32,7 @@ static constexpr std::chrono::seconds kReportInterval{5};
 bool Plugin::Load(PluginId id, ISmmAPI* ismm, char* error, size_t maxlen, bool late)
 {
 	PLUGIN_SAVEVARS();
+	SH_METAMOD_OVERRIDE_SAVEVARS(id);
 
 	GET_V_IFACE_CURRENT(GetServerFactory, g_pSource2Server, ISource2Server, SOURCE2SERVER_INTERFACE_VERSION);
 	GET_V_IFACE_CURRENT(GetEngineFactory, g_pEngineServer, IVEngineServer2, SOURCE2ENGINETOSERVER_INTERFACE_VERSION);

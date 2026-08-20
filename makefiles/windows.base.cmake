@@ -14,4 +14,5 @@ set(LINK_LIBRARIES
     ${SOURCESDK_LIB}/public/win64/mathlib.lib
     Protobufs
     dynlibutils
+    sourcehook
 )

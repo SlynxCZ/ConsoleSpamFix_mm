@@ -60,7 +60,13 @@ include_directories(
     ${SOURCESDK}/public/game/server
     ${SOURCESDK}/public/schemasystem
     ${METAMOD_DIR}/core
-    ${METAMOD_DIR}/core/sourcehook
+    # NOT ${METAMOD_DIR}/core/sourcehook: this plugin brings its own private
+    # SourceHook (vendor/sourcehook submodule). Its include dirs come from
+    # the add_subdirectory(vendor/sourcehook) target in CMakeLists.txt
+    # (PUBLIC, so nothing to list here), including the shim that keeps
+    # metamod's own ISmmPlugin.h `#include "sourcehook.h"` resolving -- to
+    # our copy. See src/plugin.h's include of
+    # sourcehook/sourcehook_metamod_override.h for the caveat this carries.
     ${CMAKE_SOURCE_DIR}/vendor
     ${CMAKE_SOURCE_DIR}/vendor/dynlibutils/include
     ${CMAKE_SOURCE_DIR}/vendor/dynlibutils/include/dynlibutils
