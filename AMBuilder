@@ -18,10 +18,6 @@ for sdk_target in MMSPlugin.sdk_targets:
     os.path.join('src', 'plugin.cpp'),
   ]
 
-  binary.sources += [
-    os.path.join('src', 'sdk', 'schemasystem_helper.cpp')
-  ]
-
   binary.compiler.linkflags += [
     MMSPlugin.sourcehook_lib['binaries_by_arch'][cxx.target.arch],
     MMSPlugin.dynlibutils_lib[cxx.target.arch],
