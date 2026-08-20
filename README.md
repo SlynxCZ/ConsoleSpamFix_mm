@@ -128,7 +128,7 @@ CUtlVector<CServerSideClient*>* GetClientList()
     if (!pServer)
         return nullptr;
 
-    return CMemory(pServer).Offset(kClientListOffset).RCast<CUtlVector<CServerSideClient*>*>();
+    return CMemory(pServer).Offset(0x248).RCast<CUtlVector<CServerSideClient*>*>();
 }
 ```
 
